@@ -484,3 +484,20 @@ with that ID is not well defined by the Layer Patch specification.
 The default behavior is to set the property to null if the ID is not
 found.  Setting the returnIds property to true will set the property
 to the string ID if the object is not found.
+
+## Testing
+
+To run unit tests use the following command:
+
+    npm test
+
+## Contributing
+
+Layer Patch Javascript Utility is an Open Source project maintained by Layer, inc. Feedback and contributions are always welcome and the maintainers try to process patches as quickly as possible. Feel free to open up a Pull Request or Issue on Github.
+
+## Contact
+
+Layer Web SDK was developed in San Francisco by the Layer team. If you have any technical questions or concerns about this project feel free to reach out to engineers responsible for the development:
+
+* [Michael Kantor](mailto:michael@layer.com)
+* [Nil Gradisnik](mailto:nil@layer.com)
