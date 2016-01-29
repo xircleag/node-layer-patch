@@ -1,4 +1,6 @@
 # Layer Patch Javascript Utility
+[![Build Status](http://img.shields.io/travis/layerhq/node-layer-patch.svg)](https://travis-ci.org/layerhq/node-layer-patch)
+[![npm version](http://img.shields.io/npm/v/layer-patch.svg)](https://npmjs.org/package/layer-patch)
 
 For more information about why Layer-Patch, read the [Layer-Patch Format](https://github.com/layerhq/layer-patch/blob/master/README.md) spec.
 
