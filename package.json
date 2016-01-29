@@ -2,15 +2,21 @@
   "name": "layer-patch",
   "version": "1.0.0",
   "description": "The Layer Patch Parser: Implements the Layer Patch Parser for parsing Layer Patch messages",
-  "homepage": "https://github.com/layerhq/layer-patch/tree/master/js",
-  "repository": "https://github.com/layerhq/layer-patch/tree/master/js",
+  "homepage": "https://github.com/layerhq/node-layer-patch",
+  "repository": "https://github.com/layerhq/node-layer-patch",
+  "author": "Layer developers <michael@layer.com> (https://layer.com)",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "prepublish": "grunt test"
   },
-  "devDependencies": {
+  "main": "layer-patch.js",
+  "repository": {
+    "type" : "git",
+    "url" : "layerhq/node-layer-patch"
+  },
+    "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jasmine": "^1.0.0"
-  },
-  "main": "layer-patch.js"
+  }
 }
