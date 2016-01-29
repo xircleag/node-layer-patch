@@ -1,0 +1,13 @@
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Ignore editor config files
+*.sublime-workspace
+*.sublime-project
+.vscode
+.eslintrc
+jsconfig.json
+
+# These will be shared over github but not npm
+test
+
