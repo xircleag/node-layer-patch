@@ -126,12 +126,12 @@ describe("Layer Patch Tests", function() {
         });
 
         it("Should set by ID with invalid ID", function() {
-	        parser = new LayerPatchParser({
-		    returnIds: true,
-		    getObjectCallback: function(id) {
-                	return objectCache[id];
-		    }
-		});
+  	        parser = new LayerPatchParser({
+        		    returnIds: true,
+        		    getObjectCallback: function(id) {
+                    return objectCache[id];
+        		    }
+      		  });
 
 
             parser.parse({

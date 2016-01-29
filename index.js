@@ -2,11 +2,11 @@
  * The layer.js.LayerPatchParser method will parse
  *
  * @method
- * @param {Boolean} [camelCase=false]                      Set the camel cased version of the name of the input object
- * @param {Object} [propertyNameMap]                  Maps property names in the operation to property names in the local object schema
- * @param {Object} [changeCallbacks]                  Callback made any time an object is changed
- * @param {Object} [abortCallbacks]             Callback made to verify a change is permitted
- * @param {Function} [doesObjectMatchIdCallback]      Callback returns boolean to indicate if a given object matches an ID.
+ * @param {Boolean}   [camelCase=false]             Set the camel cased version of the name of the input object
+ * @param {Object}    [propertyNameMap]             Maps property names in the operation to property names in the local object schema
+ * @param {Object}    [changeCallbacks]             Callback made any time an object is changed
+ * @param {Object}    [abortCallbacks]              Callback made to verify a change is permitted
+ * @param {Function}  [doesObjectMatchIdCallback]   Callback returns boolean to indicate if a given object matches an ID.
  * @return {Boolean}                                Returns true if all operations completed successfully, false if some returned errors
  */
 
@@ -118,10 +118,10 @@
   function getValue(op, options) {
     if (op.id) {
       if (!this.getObjectCallback) throw new Error('Must provide getObjectCallback in constructor to use ids');
-    var result = this.getObjectCallback(op.id);
-    if (result) return result;
-    if (this.returnIds) return op.id;
-    return null;
+      var result = this.getObjectCallback(op.id);
+      if (result) return result;
+      if (this.returnIds) return op.id;
+      return null;
     } else {
       return op.value;
     }

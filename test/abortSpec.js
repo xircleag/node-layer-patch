@@ -1,6 +1,5 @@
 describe("Abort Callback Tests", function() {
 
-
     it("Should call the propertyName handler with the proper arguments", function() {
         var called = false;
         parser = new LayerPatchParser({
@@ -182,6 +181,4 @@ describe("Abort Callback Tests", function() {
             a: 5
         });
     });
-
-
 });

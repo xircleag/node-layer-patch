@@ -1,7 +1,5 @@
 /*eslint-disable */
 
-
-
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -14,7 +12,7 @@ module.exports = function(grunt) {
             summary: true
           },
           build: {
-            src: ['layer-patch.js']
+            src: ['index.js']
           }
         }
     });

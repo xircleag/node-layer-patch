@@ -1,5 +1,7 @@
 # Layer Patch Javascript Utility
 
+For more information about why Layer-Patch, read the [Layer-Patch Format](https://github.com/layerhq/layer-patch/blob/master/README.md) spec.
+
 The goal of this utility is to take as input
 
 1. Layer Patch Operations Arrays
@@ -13,22 +15,21 @@ The goal of this utility is to take as input
 The recommended approach for installation is npm:
 
 ```
-> npm install layer-patch --save
+npm install layer-patch
 ```
 
 Your initialization code will then look like:
 
-```
+```javascript
 var LayerPatchParser = require("layer-patch");
 var parser = new LayerPatchParser({});
 ```
-
 
 ### Installing from Github
 
 You can directly download the file layer-patch.js and load that from a script tag.  If you load it this way, your initialization code will look like:
 
-```
+```javascript
 var parser = new LayerPatchParser({});
 ```
 
@@ -43,7 +44,7 @@ You can download and build the repo itself via:
 
 ## Basic Example
 
-```
+```javascript
 var parser = new layer.js.LayerPatchParser({});
 
 var testObj = {
@@ -74,8 +75,7 @@ This example shows using this library for receiving operations from the Layer Pl
 
 It depends upon the getObjectCallback and changeCallbacks documented below.
 
-```
-
+```javascript
 // Setup an object cache into which we will write new objects
 var objectCache = {};
 
@@ -152,7 +152,7 @@ the `type` parameter.
 
 Every call to the `parse` method has an input of `type`:
 
-```
+```javascript
 parser.parse({
     object: testObj,
     type: "Person",
@@ -164,15 +164,16 @@ This `type` value is used as an index into many of the configuration properties 
 
 Note that subproperty names are NOT supported in any of these configurations.  For example, if you have a property called "metadata" you can use any of these configuration parameters to affect "metadata", but if an operation were to set "metadata.age", configurations on "metadata" would continue to apply, but you can not add configurations for the "age" subproperty.
 
-### getObjectCallback
+### `getObjectCallback`
 
 The getObjectCallback allows the parser to handle operations such as
-```
+
+```json
 [{"operation": "set", "property": "friend", "id": "fred"}]
 ```
 As the operation is setting by id rather than by value, the parser needs a way to lookup the object identified by "fred".  The parser will use the `getObjectCallback` method provided to find the object specified by "fred" and use that as the value.
 
-```
+```javascript
 var objectCache = {
     "fred": {
         "firstName": "fred",
@@ -218,14 +219,14 @@ The above operation will result in a final state for testObj:
 }
 ```
 
-### doesObjectMatchIdCallback
+### `doesObjectMatchIdCallback`
 
 When adding or removing objects to a set, a way of comparing objects is needed.  While adding/removing objects is only allowed by passing in an id rather than object, we need a way to compare that id to the objects in the set.  The doesObjectMatchIdCallback method will be called on each object in the set and returns true if its a match.  If its a match, an `add` operation will determine that the object is already present and does not need adding; a `remove` operation will remove the matching entry.
 
 Note that if using the Layer Platform Websocket, this method is not required; sets managed by Layer
 do not contain objects.
 
-```
+```javascript
 /**
  * @method
  * @param  {string} id  ID of the object to be added/removed
@@ -237,13 +238,12 @@ function doesObjectMatchIdCallback(id, obj) {
 }
 ```
 
-### camelCase
+### `camelCase`
 
 If true, camelCase says take any uncamel cased property names in the
 layer-patch operations array, and assume that the local copy uses the camelCased equivalent.
 
-```
-
+```javascript
 var parser = new layer.js.LayerPatchParser({
     camelCase: true
 });
@@ -269,15 +269,15 @@ The above operation will result in a final state for testObj:
 }
 ```
 
-### propertyNameMap
-
+### `propertyNameMap`
 
 The Property Name Map: Allows us to map a property name received from a
 remote client/server to our local object models which may have different property names.
 This is similar to the `camelCase` property but provides fine grained control.
 
 The map is organized by object type.
-```
+
+```javascript
 var propertyNameMap = {
     "Person": {
         "age": "year_count"
@@ -312,14 +312,14 @@ The above operation will result in a final state for testObj:
 }
 ```
 
-### changeCallbacks
+### `changeCallbacks`
 
 The Change Event Handler allows side effects and events to be fired based on a change
 executed by the parser.  The changeCallback parameter should be broken down by object type,
 and each object type can either contain an "all" function or individual functions for each property
 name.
 
-```
+```javascript
 /**
  * @param {object} object   The object that has been changed
  * @param {Mixed} oldValue  The original value of the property that changed
@@ -390,7 +390,7 @@ The two parse calls above will result in the following events:
 2. metadata callback called with (testPerson, {nickname: "Freaky Fred", last_nickname: "Friendly Fred"}, {nickname: "Freaky Frodo", last_nickname: "Freaky Fred"}, ["metadata.nickname", "metadata.last_nickname"])
 3. all callback called with (testDog, "zombie", "Frankenstein", ["preferred_food"])
 
-### abortCallback
+### `abortCallback`
 
 The Abort Event Handler allows an operation to be rejected before its performed. The abortCallback parameter should be broken down by object type,
 and each object type can either contain an "all" function or individual functions for each property
@@ -399,7 +399,7 @@ name.
 Each function should return true or a truthy value to abort the change; a falsy value will allow the
 change to procede.
 
-```
+```javascript
 /**
  * @param {string} property     The full path for the property to be changed
  * @param {object} operation    One of set, delete, add, remove
@@ -462,7 +462,8 @@ parser.parse({
 ```
 
 The two parse calls above will result in the following objects:
-```
+
+```javascript
 var testPerson = {
     year_count: 52,
     name: "fred"
@@ -476,11 +477,10 @@ var testDog = {
 };
 ```
 
-### returnIds
+### `returnIds`
 
 When setting values by ID, proper behavior when the object associated
 with that ID is not well defined by the Layer Patch specification.
 The default behavior is to set the property to null if the ID is not
 found.  Setting the returnIds property to true will set the property
 to the string ID if the object is not found.
-

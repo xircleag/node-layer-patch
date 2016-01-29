@@ -107,7 +107,7 @@ describe("PropertyMap Tests", function() {
             Ted: ["a", "b"]
         };
 
-            parser.parse({
+        parser.parse({
             object: testObject,
             type: "typeb",
             operations: [

@@ -1,6 +1,5 @@
 describe("Change Callback Tests", function() {
 
-
     it("Should call the propertyName handler with the proper arguments", function() {
         var called = false;
         parser = new LayerPatchParser({
@@ -225,5 +224,4 @@ describe("Change Callback Tests", function() {
         });
         expect(called).toEqual(true);
     });
-
 });
