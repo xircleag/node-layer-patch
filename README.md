@@ -9,10 +9,9 @@ The goal of this utility is to take as input
 1. Layer Patch Operations Arrays
 2. An object to modify
 
-## Installing
+## Installation
 
-
-### Installing from npm
+### NPM
 
 The recommended approach for installation is npm:
 
@@ -27,7 +26,7 @@ var LayerPatchParser = require("layer-patch");
 var parser = new LayerPatchParser({});
 ```
 
-### Installing from Github
+### Github
 
 You can directly download the file layer-patch.js and load that from a script tag.  If you load it this way, your initialization code will look like:
 
