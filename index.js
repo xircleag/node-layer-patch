@@ -24,6 +24,7 @@
     this.changeCallbacks = options.changeCallbacks;
     this.abortCallbacks = options.abortCallbacks;
     this.getObjectCallback = options.getObjectCallback;
+    this.createObjectCallback = options.createObjectCallback;
     this.doesObjectMatchIdCallback = options.doesObjectMatchIdCallback || function(id, obj) {
       return obj.id == id;
     };
@@ -119,6 +120,9 @@
     if (op.id) {
       if (!this.getObjectCallback) throw new Error('Must provide getObjectCallback in constructor to use ids');
       var result = this.getObjectCallback(op.id);
+      if (!result && op.value && this.createObjectCallback) {
+        result = this.createObjectCallback(op.id, op.value);
+      }
       if (result) return result;
       if (this.returnIds) return op.id;
       return null;
