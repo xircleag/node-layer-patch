@@ -1,6 +1,6 @@
 {
   "name": "layer-patch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The Layer Patch Parser: Implements the Layer Patch Parser for parsing Layer Patch messages",
   "keywords": "layer,sdk,websdk,developers,communications,messaging,chat,json,patch",
   "homepage": "https://github.com/layerhq/node-layer-patch",
