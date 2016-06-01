@@ -88,6 +88,12 @@ var parser = new LayerParser({
     getObjectCallback: function(id) {
         return objectCache[id]
     },
+    // This callback would typically instantiate a new instance rather than just directly use the value
+    // from the operation
+    createObjectCallback: function(id, value) {
+        objectCache[id] = value;
+        return value;
+    },
     changeCallbacks: {
         Message: {
             all: function(object, newValue, oldValue, paths) {
@@ -237,6 +243,90 @@ do not contain objects.
 function doesObjectMatchIdCallback(id, obj) {
     return obj.id == id;
 }
+```
+
+### `createObjectCallback`
+
+The createObjectCallback allows the parser to handle operations such as
+
+```json
+[{"operation": "set", "property": "friend", "id": "fred", "value": {id: "fred", last_name: "Flinstone"}}]
+```
+
+As the operation is setting by id rather than by value, the parser needs a way to lookup the object identified by "fred".  The parser will use the `getObjectCallback` method provided to find the object specified by "fred" and use that as the value.  But what happens if "fred" is not found? Either one must do an asynchronous lookup to get the value... or have the `value` provided as is done in the above structure.  The `createObjectCallback` allows you to take that value, create and return an instance or object, and to register the object for future calls to `getObjectCallback`.
+
+```javascript
+var objectCache = {
+    "wilma": {
+        "firstName": "wilma",
+        "lastName": "flinstone",
+        "status": "stoneAged"
+    }
+};
+
+/**
+ * @method
+ * @param  {string} id    ID of the object to look for
+ * @return {object}       Object that matches the id (or null)
+ */
+var getObjectCallback = function(id) {
+    return objectCache[id];
+}
+
+/**
+ * @method
+ * @param  {string} id  ID of the object to register
+ * @param  {object} obj Properties of the object to register
+ * @return {object}     Object derived from `obj`
+ */
+var createObjectCallback = function(id, obj) {
+    objectCache[id] = new Person(obj);
+}
+
+var parser = new layer.js.LayerPatchParser({
+    getObjectCallback: getObjectCallback,
+    createObjectCallback: createObjectCallback
+});
+
+var testObj = {
+    "a": "Hello",
+    "b": "There",
+    "friend": null
+};
+parser.parse({
+    object: testObj,
+    operations: [{"operation": "set", "property": "friend", "id": "fred", "value": {id: "fred", last_name: "Flinstone", status: "stoneAged"}}]
+});
+```
+
+The above operation will result in a final state for testObj:
+```json
+{
+    "a": "Hello",
+    "b": "There",
+    "friend": {
+        "firstName": "fred",
+        "lastName": "flinstone",
+        "status": "stoneAged"
+    }
+}
+```
+
+And a final state for `objectCache`:
+
+```javascript
+var objectCache = {
+    "wilma": {
+        "firstName": "wilma",
+        "lastName": "flinstone",
+        "status": "stoneAged"
+    },
+    "fred": {
+        "firstName": "fred",
+        "lastName": "flinstone",
+        "status": "stoneAged"
+    }
+};
 ```
 
 ### `camelCase`

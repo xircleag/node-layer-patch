@@ -9,6 +9,10 @@ describe("Layer Patch Tests", function() {
         parser = new LayerPatchParser({
             getObjectCallback: function(id) {
                 return objectCache[id];
+            },
+            createObjectCallback: function(id, value) {
+                objectCache[id] = value;
+                return value;
             }
         });
 
@@ -152,6 +156,19 @@ describe("Layer Patch Tests", function() {
                 ]
             });
             finalObject.hey = null;
+            expect(testObject).toEqual(finalObject);
+        });
+
+        it("Should set by ID and value and register a new object", function() {
+            parser.parse({
+                object: testObject,
+                operations:  [
+                    {operation: "set", property: "hey", id: "c", value: {id: "c", name: "Sea"}}
+                ]
+            });
+            expect(objectCache.c).toEqual({id: "c", name: "Sea"});
+
+            finalObject.hey = objectCache.c;
             expect(testObject).toEqual(finalObject);
         });
     });
@@ -346,6 +363,20 @@ describe("Layer Patch Tests", function() {
                 ]
             });
             finalObject.outerSet.push(objectCache.b);
+            expect(testObject).toEqual(finalObject);
+        });
+
+        it("Should add by ID and value and register a new object", function() {
+            parser.parse({
+                object: testObject,
+                operations:  [
+                    {operation: "add", property: "outerSet", id: "d", value: {id: "d", name: "inDeed"}},
+                    {operation: "add", property: "outerSet", id: "d"},
+                ]
+            });
+            expect(objectCache.d).toEqual({id: "d", name: "inDeed"});
+
+            finalObject.outerSet.push(objectCache.d);
             expect(testObject).toEqual(finalObject);
         });
     });
