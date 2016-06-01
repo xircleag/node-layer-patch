@@ -250,7 +250,7 @@ function doesObjectMatchIdCallback(id, obj) {
 The createObjectCallback allows the parser to handle operations such as
 
 ```json
-[{"operation": "set", "property": "friend", "id": "fred", "value": {id: "fred", last_name: "Flinstone"}}]
+[{"operation": "set", "property": "friend", "id": "fred", "value": {"id": "fred", "last_name": "Flinstone"}}]
 ```
 
 As the operation is setting by id rather than by value, the parser needs a way to lookup the object identified by "fred".  The parser will use the `getObjectCallback` method provided to find the object specified by "fred" and use that as the value.  But what happens if "fred" is not found? Either one must do an asynchronous lookup to get the value... or have the `value` provided as is done in the above structure.  The `createObjectCallback` allows you to take that value, create and return an instance or object, and to register the object for future calls to `getObjectCallback`.
@@ -281,6 +281,7 @@ var getObjectCallback = function(id) {
  */
 var createObjectCallback = function(id, obj) {
     objectCache[id] = new Person(obj);
+    return objectCache[id];
 }
 
 var parser = new layer.js.LayerPatchParser({
