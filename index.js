@@ -134,7 +134,7 @@
   function trackChanges(options) {
     if (!options.changes[options.baseName]) {
       var initialValue = options.object[options.baseName];
-      if ('id' in options.operation && initialValue) {
+      if ((options.operation === 'set' || options.operation === 'delete') && 'id' in options.operation && initialValue) {
         initialValue = initialValue.id;
       }
       var change = options.changes[options.baseName] = {paths: []};
