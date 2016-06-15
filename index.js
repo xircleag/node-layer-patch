@@ -70,18 +70,15 @@
     property = property.replace(/\\\./g, temporarySeparator);
     property = property.replace(/\\(.)/g, '$1');
     var parts = property.split(/\./);
-
     var r = new RegExp(temporarySeparator, 'g')
     parts = parts.map(function(part) {
       return part.replace(r, '.');
     });
-
     if (this.camelCase) {
       parts[0] = parts[0].replace(/[-_]./g, function(str) {
         return str[1].toUpperCase();
       });
     }
-
     if (this.propertyNameMap) {
       var typeDef = this.propertyNameMap[options.type];
       parts[0] = (typeDef && typeDef[parts[0]]) || parts[0];
@@ -107,6 +104,7 @@
         curObj = curObj[part];
       }
     }
+
     return {
       pointer: curObj,
       lastName: parts[parts.length-1],
@@ -136,15 +134,17 @@
       return obj.map(function(item) {
         return cloneObject(item);
       });
-    } else {
+    } else if (obj && typeof obj === 'object') {
       var keys = Object.keys(obj).filter(function(keyName) {
         return keyName.indexOf('_') !== 0;
       });
       var newObj = {};
       keys.forEach(function(keyName) {
-        newObj[keyName] = obj[keyName];
+        newObj[keyName] = cloneObject(obj[keyName]);
       });
       return newObj;
+    } else {
+      return obj;
     }
   }
 
