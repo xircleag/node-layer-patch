@@ -120,14 +120,31 @@
     if (op.id) {
       if (!this.getObjectCallback) throw new Error('Must provide getObjectCallback in constructor to use ids');
       var result = this.getObjectCallback(op.id);
-      if (!result && op.value && this.createObjectCallback) {
-        result = this.createObjectCallback(op.id, op.value);
+      if (!result && op.value) {
+        result = this.createObjectCallback ? this.createObjectCallback(op.id, op.value) : op.value;
       }
       if (result) return result;
       if (this.returnIds) return op.id;
       return null;
     } else {
       return op.value;
+    }
+  }
+
+  function cloneObject(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(function(item) {
+        return cloneObject(item);
+      });
+    } else {
+      var keys = Object.keys(obj).filter(function(keyName) {
+        return keyName.indexOf('_') !== 0;
+      });
+      var newObj = {};
+      keys.forEach(function(keyName) {
+        newObj[keyName] = obj[keyName];
+      });
+      return newObj;
     }
   }
 
@@ -138,7 +155,7 @@
         initialValue = initialValue.id;
       }
       var change = options.changes[options.baseName] = {paths: []};
-      change.before = (initialValue && typeof initialValue === 'object') ? JSON.parse(JSON.stringify(initialValue)) : initialValue;
+      change.before = (initialValue && typeof initialValue === 'object') ? cloneObject(initialValue) : initialValue;
     }
     var paths = options.changes[options.baseName].paths;
     if (paths.indexOf(options.fullPath) === -1) {
@@ -172,11 +189,16 @@
       obj = propertyDef.pointer[propertyDef.lastName] = [];
     }
     if (!Array.isArray(obj)) throw new Error('The add operation requires an array or new structure to add to.');
+    if (Array.isArray(value)) throw new Error('The add operation will not add arrays to sets.');
     if (!op.id) {
-      if (Array.isArray(value)) throw new Error('The add operation will not add arrays to sets.');
       if (value && typeof value === 'object') throw new Error('The add operation will not add objects to sets.');
+      if (obj.indexOf(value) === -1) obj.push(value);
+    } else {
+      for (var i = 0; i < obj.length; i++) {
+        if (this.doesObjectMatchIdCallback(op.id, obj[i])) return;
+      }
+      obj.push(value);
     }
-    if (obj.indexOf(value) === -1) obj.push(value);
   }
 
   function removeProp(propertyDef, value, op, options, changes) {

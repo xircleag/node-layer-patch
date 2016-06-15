@@ -224,4 +224,59 @@ describe("Change Callback Tests", function() {
         });
         expect(called).toEqual(true);
     });
+
+    it("Should call event handler with object before/after", function() {
+        var called = false;
+        var count = 0;
+        parser = new LayerPatchParser({
+            changeCallbacks: {
+                "typea": {
+                    "a": function(object, newValue, oldValue, paths) {
+                        called = true;
+
+                        expect(oldValue).toEqual({hey: "ho"});
+                        expect(newValue).toEqual({hey: "there"});
+                    }
+                }
+            }
+        });
+
+
+        parser.parse({
+            object: {a: {hey: "ho"}},
+            type: "typea",
+            operations: [
+                {operation: "set", property: "a", value: {hey: "there"}}
+            ]
+        });
+        expect(called).toEqual(true);
+    });
+
+    it("Should call event handler with array before/after", function() {
+        var called = false;
+        var count = 0;
+        parser = new LayerPatchParser({
+            getObjectCallback: function() { return null; },
+            changeCallbacks: {
+                "typea": {
+                    "a": function(object, newValue, oldValue, paths) {
+                        called = true;
+
+                        expect(oldValue).toEqual([{hey: "ho"}]);
+                        expect(newValue).toEqual([{hey: "ho"}, {hey: "there", id: "hum"}]);
+                    }
+                }
+            }
+        });
+
+
+        parser.parse({
+            object: {a: [{hey: "ho"}]},
+            type: "typea",
+            operations: [
+                {operation: "add", property: "a", id: "hum", value: {id: "hum", hey: "there"}}
+            ]
+        });
+        expect(called).toEqual(true);
+    });
 });
