@@ -1,11 +1,13 @@
 describe("Layer Patch Tests", function() {
     var testObject, finalObject, parser;
-    var objectCache = {
-        "a": {id: "a"},
-        "b": {id: "b"}
-    };
+    var objectCache;
 
     beforeEach(function() {
+        objectCache = {
+            "a": {id: "a"},
+            "b": {id: "b"}
+        };
+
         parser = new LayerPatchParser({
             getObjectCallback: function(id) {
                 return objectCache[id];
@@ -367,16 +369,29 @@ describe("Layer Patch Tests", function() {
         });
 
         it("Should add by ID and value and register a new object", function() {
+            testObject.outerSet = [{id: "d", name: "inDeed"}, {id: "e", name: "EdDeed"}];
+            finalObject.outerSet = [{id: "d", name: "inDeed"}, {id: "e", name: "EdDeed"}];
             parser.parse({
                 object: testObject,
                 operations:  [
-                    {operation: "add", property: "outerSet", id: "d", value: {id: "d", name: "inDeed"}},
-                    {operation: "add", property: "outerSet", id: "d"},
+                    {operation: "add", property: "outerSet", id: "c", value: {id: "c", name: "caDeed"}}
+                ]
+            });
+            expect(objectCache.c).toEqual({id: "c", name: "caDeed"});
+            finalObject.outerSet.push(objectCache.c);
+            expect(testObject).toEqual(finalObject);
+        });
+
+        it("Should detect existing object by ID and value", function() {
+            testObject.outerSet = [{id: "d", name: "inDeed"}, {id: "e", name: "EdDeed"}];
+            finalObject.outerSet = [{id: "d", name: "inDeed"}, {id: "e", name: "EdDeed"}];
+            parser.parse({
+                object: testObject,
+                operations:  [
+                    {operation: "add", property: "outerSet", id: "d", value: {id: "d", name: "inDeed"}}
                 ]
             });
             expect(objectCache.d).toEqual({id: "d", name: "inDeed"});
-
-            finalObject.outerSet.push(objectCache.d);
             expect(testObject).toEqual(finalObject);
         });
     });
