@@ -134,6 +134,8 @@
       return obj.map(function(item) {
         return cloneObject(item);
       });
+    } else if (obj instanceof Date) {
+      return new Date(obj);
     } else if (obj && typeof obj === 'object') {
       var keys = Object.keys(obj).filter(function(keyName) {
         return keyName.indexOf('_') !== 0;
