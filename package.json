@@ -11,8 +11,7 @@
   "author": "Layer developers <michael@layer.com> (https://layer.com)",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "grunt test",
-    "prepublish": "grunt test"
+    "test": "open test/SpecRunner.html"
   },
   "main": "index.js",
   "devDependencies": {
