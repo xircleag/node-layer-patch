@@ -134,6 +134,12 @@
       return obj.map(function(item) {
         return cloneObject(item);
       });
+    } else if (obj instanceof Set) {
+      var newObj = new Set();
+      obj.forEach(function(item) {
+        newObj.add(item);
+      });
+      return newObj;
     } else if (obj instanceof Date) {
       return new Date(obj);
     } else if (obj && typeof obj === 'object') {
@@ -190,7 +196,7 @@
     } else {
       obj = propertyDef.pointer[propertyDef.lastName] = [];
     }
-    if (!Array.isArray(obj)) throw new Error('The add operation requires an array or new structure to add to.');
+    if (!Array.isArray(obj) && !(obj instanceof Set)) throw new Error('The add operation requires an array or new structure to add to.');
     if (Array.isArray(value)) throw new Error('The add operation will not add arrays to sets.');
     if (!op.id) {
       if (value && typeof value === 'object') throw new Error('The add operation will not add objects to sets.');
@@ -199,7 +205,11 @@
       for (var i = 0; i < obj.length; i++) {
         if (this.doesObjectMatchIdCallback(op.id, obj[i])) return;
       }
-      obj.push(value);
+      if (obj instanceof Set) {
+        obj.add(value);
+      } else {
+        obj.push(value);
+      }
     }
   }
 
@@ -213,19 +223,27 @@
     } else {
       obj = propertyDef.pointer[propertyDef.lastName] = [];
     }
-    if (!Array.isArray(obj)) throw new Error('The remove operation requires an array or new structure to remove from.');
+    if (!Array.isArray(obj) && !(obj instanceof Set)) throw new Error('The remove operation requires an array or new structure to remove from.');
 
     if (!op.id) {
       if (Array.isArray(value)) throw new Error('The remove operation will not remove arrays from sets.');
       if (value && typeof value === 'object') throw new Error('The remove operation will not remove objects from sets.');
 
-      var index = obj.indexOf(value);
-      if (index !== -1) obj.splice(index, 1);
+      if (obj instanceof Set) {
+        obj.remove(value);
+      } else {
+        var index = obj.indexOf(value);
+        if (index !== -1) obj.splice(index, 1);
+      }
     } else {
-      for (var i = 0; i < obj.length; i++) {
-        if (this.doesObjectMatchIdCallback(op.id, obj[i])) {
-          obj.splice(i, 1);
-          break;
+      if (obj instanceof Set) {
+        obj.delete(value);
+      } else {
+        for (var i = 0; i < obj.length; i++) {
+          if (this.doesObjectMatchIdCallback(op.id, obj[i])) {
+            obj.splice(i, 1);
+            break;
+          }
         }
       }
     }
