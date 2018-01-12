@@ -1,6 +1,6 @@
 {
   "name": "layer-patch",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The Layer Patch Parser: Implements the Layer Patch Parser for parsing Layer Patch messages",
   "keywords": "layer,sdk,websdk,developers,communications,messaging,chat,json,patch",
   "homepage": "https://github.com/layerhq/node-layer-patch",
@@ -15,8 +15,8 @@
   },
   "main": "index.js",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-jasmine": "^1.0.0"
   }
 }
